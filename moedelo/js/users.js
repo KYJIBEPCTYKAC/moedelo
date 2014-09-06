@@ -62,7 +62,7 @@
             $(".trow").remove();
 
             for (var i = 0, item; i < userList.length, item = userList[i]; i++) {
-                appendRow(item.name, item.email, item.salary, i)
+                appendRow(item, i)
             }
             $(".ecell").on("click", editRow);
 
@@ -85,9 +85,14 @@
                 modal: true,
                 buttons: {
                     "Удалить": function () {
-                        var tmp = $(evt.currentTarget).parent().parent().attr("itemindex");
-                        userList.splice(tmp, 1)
-                        loadListComplete();
+                        var tmpEl = $(evt.currentTarget).parent().parent();
+                        var tmp = tmpEl.attr("itemindex");
+                        userList.splice(tmp, 1);
+                        tmpEl.remove();
+                        for (var i = tmp; i < userList.length; i++) {
+                            userList[i].rowEl.attr("itemindex", i);
+                        }
+                        //loadListComplete();
                         $(this).dialog("close");
                     },
                     "Отмена": function () {
@@ -98,21 +103,29 @@
 
         }
 
-        function appendRow(pName, pEmail, pSalary, pIndex) {
-            $("#users tbody").append('<tr class="trow" itemindex="'+pIndex+'">' +
-              '<td cellname="name" class="ecell">' + pName + "</td>" +
-              '<td cellname="email" class="ecell">' + pEmail + "</td>" +
-              '<td cellname="salary" class="ecell">' + pSalary + "</td>" +
-              '<td><button class="userbutton deletebutton newbutton">' + msgDelete + '</button>' +
+        function appendRow(pObj, pIndex) {
+            $("#users tbody").append('<tr class="trow newrow" itemindex="' + pIndex + '">' +
+              '<td cellname="name" class="ecell">' + pObj.name + "</td>" +
+              '<td cellname="email" class="ecell">' + pObj.email + "</td>" +
+              '<td cellname="salary" class="ecell">' + pObj.salary + "</td>" +
+              '<td><button class="userbutton deletebutton newbutton">Удалить</button>' +
             "</tr>");
+            pObj.rowEl = $(".newrow").removeClass("newrow");
             $(".newbutton").button({ icons: { primary: "ui-icon-closethick" } }).on("click", deleteRow).removeClass("newbutton");
         }
+
+        function updateRow(pObj) {
+            pObj.rowEl.children('[cellname="name"]').text(pObj.name);
+            pObj.rowEl.children('[cellname="email"]').text(pObj.email);
+            pObj.rowEl.children('[cellname="salary"]').text(pObj.salary);
+        }
+
         function saveUser() {
             var valid = true;
             allFields.removeClass("ui-state-error");
 
             valid = valid && checkLength(name, "username", 3, 80);
-            valid = valid && checkLength(email, "email", 6, 80);
+            valid = valid && checkLength(email, "email", 6, 100);
             valid = valid && checkLength(salary, "salary", 5, 16);
 
             valid = valid && checkRegexp(name, /[а-я_\s]+$/i, "Имя может содержать только русские буквы и пробелы!");
@@ -129,16 +142,15 @@
                     ID: userList.length + 1
                 };
                 userList.push(tmpObj);
+                appendRow(tmpObj, userList.length - 1);
             }
             else {
                 var tmpObj = userList[selectedRow];
                 tmpObj.name = name.val();
                 tmpObj.email = email.val();
                 tmpObj.salary = salary.val();
-
-
+                updateRow(tmpObj);
             }
-            loadListComplete();
             dialog.dialog("close");
             return valid;
         }

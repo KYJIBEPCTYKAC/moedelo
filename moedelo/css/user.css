@@ -34,3 +34,25 @@ div#users-contain table td, div#users-contain table th {
     padding: .3em; 
 }
  
+#msgWindow {
+    position: absolute; 
+    top: 6px;
+    font-weight: bold;
+    color: #1c94c4;
+    background-color: #bbbbbb;
+    left: 275px; 
+    width: 325px;
+    height: 35px;
+    padding-top: 20px;
+    padding-left: 10px;
+    border-radius: 5px;
+    line-height: 1px;
+    z-index: 10000;
+    opacity: 0.8;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+}
+.hide_win{
+    display: none;
+}

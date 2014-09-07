@@ -4,14 +4,21 @@
 @section Scripts{
     <script type="text/javascript" src="~/js/users.js" defer></script>
     <link rel="stylesheet" href="~/css/user.css" />
+    <script type="text/javascript">
+        var urlGetList = '@Url.Action("GetList", "WorkerList")',
+            urlUpdateOrInsertItem = '@Url.Action("UpdateOrInsertItem", "WorkerList")',
+            urlDeleteItem = '@Url.Action("DeleteItem", "WorkerList")';
+    </script>
 }
+<div class="hide_win" id="msgWindow" ></div>
 <button id="create-user" class="userbutton">Добавить</button>
 <button id="refresh-user" class="userbutton">Обновить</button>
 
 <div id="dialog-form" title="Карточка сотрудника">
-  <p class="validateTips">Пожалуйста, заполните все поля.</p>
   <form>
     <fieldset>
+        <legend class="validateTips">Пожалуйста, заполните все поля.</legend>
+        <br>
         <div class="frmfield">
             <label for="name">ФИО</label>
             <input type="text" name="name" id="name" value="" class="text ui-widget-content ui-corner-all field">
@@ -41,7 +48,7 @@
   <table id="users" class="ui-widget ui-widget-content" style="width: 100%;">
     <thead>
       <tr class="ui-widget-header ">
-        <th style="width=20%;">ФИО</th>
+        <th style="width: 20%;">ФИО</th>
         <th>E-mail</th>
         <th>Зарплата</th>
         <th></th>

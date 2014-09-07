@@ -108,6 +108,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\SqlMapper.cs" />
+    <Compile Include="Models\Worker.cs" />
+    <Compile Include="Models\WorkerDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +144,7 @@
     <Content Include="jquery\jquery-ui.structure.min.css" />
     <Content Include="jquery\jquery-ui.theme.css" />
     <Content Include="jquery\jquery-ui.theme.min.css" />
+    <Content Include="js\execquery.js" />
     <Content Include="js\users.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -153,7 +157,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
     <Folder Include="SharedClasses\" />
   </ItemGroup>
   <ItemGroup>

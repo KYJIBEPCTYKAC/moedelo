@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using moedelo.Models;
 
 namespace moedelo.App_Start
 {
     public class WorkerListController : Controller
     {
-        //
-        // GET: /WorkerList/
+        private WorkerDB workerdb = new WorkerDB();
 
         public ActionResult Index()
         {
@@ -17,88 +18,61 @@ namespace moedelo.App_Start
         }
 
         //
-        // GET: /WorkerList/Details/5
-
-        public ActionResult Details(int id)
+        // GET: /WorkerList/GetList
+        public ActionResult GetList(int usersID)
         {
-            return View();
+            Thread.Sleep(1000);
+            List<Worker> resultSet = (List<Worker>)workerdb.GetWorkers(usersID);
+            return Json(resultSet, JsonRequestBehavior.AllowGet);
         }
-
         //
-        // GET: /WorkerList/Create
-
-        public ActionResult Create()
+        // GET: /WorkerList/UpdateOrInsertItem
+        public ActionResult UpdateOrInsertItem(String cName, String cEmail, decimal ySalary, int usersID)
         {
-            return View();
-        }
-
-        //
-        // POST: /WorkerList/Create
-
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
+            Thread.Sleep(1000);
+            int error = 0;
+            String msg = "OK";
+            int res = -1;
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                res = workerdb.UpdateOrInsertWorker(new Worker
+                {
+                    usersID = usersID,
+                    cName = cName,
+                    cEmail = cEmail,
+                    ySalary = ySalary
+                });
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                error = e.InnerException.HResult;
+                msg = e.Message;
             }
+
+
+            return Json(new { error = error, msg = msg, usersID = res }, JsonRequestBehavior.AllowGet);
         }
 
-        //
-        // GET: /WorkerList/Edit/5
 
-        public ActionResult Edit(int id)
+                //
+        // GET: /WorkerList/DeleteItem
+        public ActionResult DeleteItem(int usersID)
         {
-            return View();
-        }
+            Thread.Sleep(1000);
+            int error = 0;
+            String msg = "OK";
 
-        //
-        // POST: /WorkerList/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                workerdb.DeleteWorker(usersID);
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                error = e.HResult;
+                msg = e.Message;
             }
+            return Json(new { error = error, msg = msg }, JsonRequestBehavior.AllowGet);
         }
 
-        //
-        // GET: /WorkerList/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /WorkerList/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

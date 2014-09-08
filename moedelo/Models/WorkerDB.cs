@@ -59,6 +59,8 @@ namespace moedelo.Models
                 );
             var retResults = SqlMapper.Execute(sqlConnection, sql, dp, commandType: CommandType.StoredProcedure);
             worker.usersID = dp.Get<int>("nUsersID");
+            if (sqlConnection.State == ConnectionState.Open)
+                sqlConnection.Close();
             return worker.usersID;
         }
 
@@ -75,6 +77,8 @@ namespace moedelo.Models
                 System.Data.ParameterDirection.Input
                 );
             var retResults = SqlMapper.Execute(sqlConnection, sql, dp, commandType: CommandType.StoredProcedure);
+            if (sqlConnection.State == ConnectionState.Open)
+                sqlConnection.Close();
         }
     }
 }
